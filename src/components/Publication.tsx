@@ -8,15 +8,19 @@ export function Publication() {
     <section className="section" id="publication">
       <div className="container">
         <SectionHead
-          index="03"
-          label="Publication"
-          title="When a benchmark has eleven bearings, chance is hard to beat."
-          lede="A methods paper on what an ML result means at the real size of a public dataset, written as a sole author. The same habit, asking what a claim would look like if the model had learned nothing, is what I bring to AI security."
+          index="05"
+          label="Research · Publication"
+          title={
+            <>
+              When a benchmark has eleven bearings, <span className="gradient-text">chance is hard to beat</span>.
+            </>
+          }
+          lede="A first-author methods paper on what an ML result means at the real size of a public dataset. Asking what a claim would look like if the model had learned nothing is a habit I carry into every AI system I build."
         />
 
-        <Reveal className="card paper" as="article">
+        <Reveal className="card gborder paper" as="article">
           <div className="paper-meta">
-            <span className="badge badge-accent">{paper.status}</span>
+            <span className="badge badge-grad">{paper.status}</span>
             {paper.areas.map((a) => (
               <span className="badge" key={a}>
                 {a}
@@ -26,14 +30,15 @@ export function Publication() {
           <h3 className="paper-title">{paper.title}</h3>
           <p className="paper-authors">
             <strong>{paper.authors}</strong> · {paper.affiliation} ·{' '}
-            <a href={profile.links.orcid} target="_blank" rel="noopener" style={{ textDecoration: 'underline', textUnderlineOffset: 3 }}>
+            <a href={profile.links.orcid} target="_blank" rel="noopener">
               ORCID 0009-0001-0778-064X
             </a>
           </p>
+          <p className="paper-venue">{paper.venueNote}</p>
           <p className="paper-summary">{paper.summary}</p>
 
           <div className="paper-links">
-            <a className="btn btn-primary btn-sm" href={paper.links.pdf} target="_blank" rel="noopener">
+            <a className="btn btn-grad btn-sm" href={paper.links.pdf} target="_blank" rel="noopener">
               <Icon name="file" /> Paper PDF
             </a>
             <a className="btn btn-sm" href={paper.links.code} target="_blank" rel="noopener">
@@ -47,7 +52,7 @@ export function Publication() {
           <div className="findings">
             {paper.findings.map((f) => (
               <div className="finding" key={f.label}>
-                <div className="finding-value">{f.value}</div>
+                <div className="finding-value gradient-text">{f.value}</div>
                 <div className="finding-label">{f.label}</div>
               </div>
             ))}
@@ -68,7 +73,7 @@ export function Publication() {
             </div>
             <div>
               <div className="subhead">The result that started it</div>
-              <div className="bridge-quote" style={{ marginTop: 0 }}>
+              <div className="quote">
                 A standard deep baseline (WDCNN) stays inside its null on both rigs (p = 0.79 and 0.72), yet tells
                 individual bearings apart at 99.5 % and 95.8 %. It learned the bearings, not the faults.
               </div>

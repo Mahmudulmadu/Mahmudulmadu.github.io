@@ -1,32 +1,26 @@
 import { useEffect, useState } from 'react';
 import { profile } from '../data/profile';
-import { useActiveSection, type Theme } from '../hooks';
+import { useActiveSection, useScroll, type Theme } from '../hooks';
 import { Icon } from './Icon';
 
 export const navItems = [
   { id: 'about', label: 'About' },
-  { id: 'security', label: 'AI Security' },
-  { id: 'publication', label: 'Publication' },
-  { id: 'research', label: 'Research' },
+  { id: 'expertise', label: 'Expertise' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
+  { id: 'publication', label: 'Research' },
+  { id: 'security', label: 'AI Security' },
+  { id: 'teaching', label: 'Teaching' },
   { id: 'skills', label: 'Skills' },
-  { id: 'contact', label: 'Contact' },
 ];
 
-const ids = navItems.map((n) => n.id);
+const ids = [...navItems.map((n) => n.id), 'research', 'honors', 'contact'];
 
 export function Nav({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () => void }) {
-  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(ids);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  const { progress, past } = useScroll();
+  let active = useActiveSection(ids);
+  if (active === 'research') active = 'publication';
 
   useEffect(() => {
     if (!open) return;
@@ -36,63 +30,66 @@ export function Nav({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () 
   }, [open]);
 
   return (
-    <header className={`nav ${scrolled || open ? 'is-scrolled' : ''}`}>
-      <nav className="container nav-inner" aria-label="Main">
-        <a href="#top" className="brand" onClick={() => setOpen(false)}>
-          <span className="brand-mark">MH</span>
-          <span>{profile.name}</span>
-        </a>
-
-        <ul className="nav-links">
-          {navItems.map((n) => (
-            <li key={n.id}>
-              <a href={`#${n.id}`} className={active === n.id ? 'is-active' : ''} aria-current={active === n.id ? 'true' : undefined}>
-                {n.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="nav-actions">
-          <button
-            type="button"
-            className="icon-btn"
-            onClick={onToggleTheme}
-            aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
-            title={theme === 'dark' ? 'Light theme' : 'Dark theme'}
-          >
-            <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
-          </button>
-          <a className="btn btn-sm" href={profile.cv} target="_blank" rel="noopener">
-            <Icon name="download" /> CV
+    <>
+      <div className="progress" style={{ transform: `scaleX(${progress})` }} aria-hidden="true" />
+      <header className={`nav ${past || open ? 'is-scrolled' : ''}`}>
+        <nav className="container nav-inner" aria-label="Main">
+          <a href="#top" className="brand" onClick={() => setOpen(false)}>
+            <span className="brand-mark">MH</span>
+            <span>{profile.firstName}</span>
           </a>
-          <button
-            type="button"
-            className="icon-btn nav-menu-btn"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            onClick={() => setOpen((o) => !o)}
-          >
-            <Icon name={open ? 'close' : 'menu'} />
-          </button>
-        </div>
-      </nav>
 
-      <div id="mobile-menu" className={`mobile-panel ${open ? 'is-open' : ''}`} aria-hidden={!open}>
-        <ul>
-          {navItems.map((n) => (
-            <li key={n.id}>
-              <a href={`#${n.id}`} className={active === n.id ? 'is-active' : ''} tabIndex={open ? 0 : -1} onClick={() => setOpen(false)}>
-                {n.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a className="btn btn-sm" href={profile.cv} target="_blank" rel="noopener" tabIndex={open ? 0 : -1}>
-          <Icon name="download" /> Download CV
-        </a>
-      </div>
-    </header>
+          <ul className="nav-links">
+            {navItems.map((n) => (
+              <li key={n.id}>
+                <a href={`#${n.id}`} className={active === n.id ? 'is-active' : ''} aria-current={active === n.id ? 'true' : undefined}>
+                  {n.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+
+          <div className="nav-actions">
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={onToggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+              title={theme === 'dark' ? 'Light theme' : 'Dark theme'}
+            >
+              <Icon name={theme === 'dark' ? 'sun' : 'moon'} />
+            </button>
+            <a className="btn btn-grad btn-sm" href="#contact">
+              <Icon name="mail" /> Let’s talk
+            </a>
+            <button
+              type="button"
+              className="icon-btn nav-menu-btn"
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((o) => !o)}
+            >
+              <Icon name={open ? 'close' : 'menu'} />
+            </button>
+          </div>
+        </nav>
+
+        <div id="mobile-menu" className={`mobile-panel ${open ? 'is-open' : ''}`} aria-hidden={!open}>
+          <ul>
+            {[...navItems, { id: 'contact', label: 'Contact' }].map((n) => (
+              <li key={n.id}>
+                <a href={`#${n.id}`} className={active === n.id ? 'is-active' : ''} tabIndex={open ? 0 : -1} onClick={() => setOpen(false)}>
+                  {n.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <a className="btn btn-grad btn-sm" href={profile.cv} target="_blank" rel="noopener" tabIndex={open ? 0 : -1}>
+            <Icon name="download" /> Download CV
+          </a>
+        </div>
+      </header>
+    </>
   );
 }

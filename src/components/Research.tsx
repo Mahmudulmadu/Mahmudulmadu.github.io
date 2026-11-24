@@ -1,29 +1,32 @@
 import { dtResearch } from '../data/profile';
 import { Icon } from './Icon';
-import { Reveal, SectionHead } from './Reveal';
+import { Reveal } from './Reveal';
 
 export function Research() {
   return (
-    <section className="section" id="research">
+    <section className="section" id="research" style={{ paddingTop: 28 }}>
       <div className="container">
-        <SectionHead
-          index="04"
-          label="Ongoing research"
-          title="Digital twins, retrieval and LLMs for predictive maintenance that can explain itself."
-          lede="The larger project the paper came from: an end-to-end framework for industrial electric motors where an LLM explains a prediction in plain language, grounded in the unit’s own documentation, and is checked so it never claims more than the evidence supports."
-        />
-
-        <Reveal className="card dt" as="article">
+        <Reveal className="card spot dt" as="article">
           <div className="dt-head">
-            <h3 className="dt-title">{dtResearch.title}</h3>
+            <div>
+              <div className="dt-role">
+                {dtResearch.role} · {dtResearch.period}
+              </div>
+              <h3 className="dt-title">{dtResearch.title}</h3>
+            </div>
             <span className="badge badge-warm">{dtResearch.status}</span>
           </div>
-          <p className="dt-question">“{dtResearch.question}”</p>
+          <p className="dt-question">
+            “<span className="gradient-text">{dtResearch.question}</span>”
+          </p>
 
           <ol className="pipeline" aria-label="Framework pipeline">
             {dtResearch.pipeline.map((p, i) => (
               <li key={p.name} className={`pipe-node ${p.name === 'Output contract' || p.name === 'Contract checker' ? 'is-key' : ''}`}>
-                <div className="pipe-step">{String(i + 1).padStart(2, '0')}</div>
+                <div className="pipe-icon">
+                  <Icon name={p.icon} />
+                  <span className="pipe-step">{String(i + 1).padStart(2, '0')}</span>
+                </div>
                 <div className="pipe-name">{p.name}</div>
                 <div className="pipe-detail">{p.detail}</div>
               </li>
@@ -61,10 +64,7 @@ export function Research() {
                   ))}
                 </div>
               </div>
-              <div className="bridge-quote" style={{ display: 'flex', gap: 12 }}>
-                <Icon name="shield" width={18} height={18} style={{ flex: 'none', marginTop: 3, color: 'var(--accent-ink)' }} />
-                <span>{dtResearch.securityLink}</span>
-              </div>
+              <div className="quote">{dtResearch.securityLink}</div>
             </div>
           </div>
         </Reveal>

@@ -1,5 +1,7 @@
-import { heroStats, profile } from '../data/profile';
+import { heroBadges, heroStats, profile, techMarquee } from '../data/profile';
+import { useCountUp, useReveal, useTypewriter, type Theme } from '../hooks';
 import { Icon, type IconName } from './Icon';
+import { NetworkCanvas } from './NetworkCanvas';
 import { Reveal } from './Reveal';
 
 export const socialLinks: { label: string; href: string; icon: IconName }[] = [
@@ -8,12 +10,42 @@ export const socialLinks: { label: string; href: string; icon: IconName }[] = [
   { label: 'Kaggle', href: profile.links.kaggle, icon: 'kaggle' },
   { label: 'ORCID', href: profile.links.orcid, icon: 'orcid' },
   { label: 'LeetCode', href: profile.links.leetcode, icon: 'code' },
+  { label: 'Codeforces', href: profile.links.codeforces, icon: 'terminal' },
   { label: 'Email', href: `mailto:${profile.email}`, icon: 'mail' },
 ];
 
-export function Hero() {
+function Stat({ value, decimals, suffix, label, start }: (typeof heroStats)[number] & { start: boolean }) {
+  const n = useCountUp(value, start);
+  return (
+    <div className="card spot stat">
+      <dt className="stat-label">{label}</dt>
+      <dd className="stat-value gradient-text">
+        {n.toFixed(decimals)}
+        {suffix}
+      </dd>
+    </div>
+  );
+}
+
+function Stats() {
+  const [ref, visible] = useReveal<HTMLDListElement>();
+  return (
+    <dl ref={ref} className={`stats reveal ${visible ? 'is-visible' : ''}`}>
+      {heroStats.map((s) => (
+        <Stat key={s.label} {...s} start={visible} />
+      ))}
+    </dl>
+  );
+}
+
+export function Hero({ theme }: { theme: Theme }) {
+  const word = useTypewriter(profile.typewriter);
+  const [first, ...rest] = profile.name.split(' ');
+  const loop = [...techMarquee, ...techMarquee];
+
   return (
     <section className="hero" id="top">
+      <NetworkCanvas theme={theme} />
       <div className="container">
         <div className="hero-grid">
           <div>
@@ -24,40 +56,42 @@ export function Hero() {
               </div>
             </Reveal>
             <Reveal delay={60}>
+              <p className="hello">
+                <span>&gt;</span> Hi, I’m
+              </p>
               <h1 className="hero-name">
-                {profile.name}
-                <span className="accent-dot">.</span>
+                {first} {rest.slice(0, -1).join(' ')}
+                <span className="line2">{rest[rest.length - 1]}.</span>
               </h1>
             </Reveal>
             <Reveal delay={120}>
-              <div className="hero-role">
-                <span>AI Engineer @ Ainvio</span>
-                <span>AI Security Research</span>
-                <span>Kaggle Expert</span>
-              </div>
+              <p className="hero-title">{profile.title} · Independent researcher</p>
             </Reveal>
-            <Reveal delay={180}>
-              <p className="hero-headline">
-                I build production <em>multi-agent AI systems</em>, and I research how they can be <em>broken</em>.
+            <Reveal delay={160}>
+              <p className="typer" aria-label={`I build ${profile.typewriter.join(', ')}`}>
+                <span aria-hidden="true">
+                  I build <span className="word">{word}</span>
+                  <span className="caret" />
+                </span>
               </p>
             </Reveal>
-            <Reveal delay={240}>
+            <Reveal delay={220}>
               <p className="hero-intro">{profile.intro}</p>
             </Reveal>
-            <Reveal delay={300}>
+            <Reveal delay={280}>
               <div className="hero-cta">
-                <a className="btn btn-primary" href="#security">
-                  Research focus <Icon name="arrowRight" />
+                <a className="btn btn-grad" href="#projects">
+                  View my work <Icon name="arrowRight" />
                 </a>
-                <a className="btn" href="#publication">
+                <a className="btn" href={profile.cv} target="_blank" rel="noopener">
+                  <Icon name="download" /> Download CV
+                </a>
+                <a className="btn btn-ghost" href="#publication">
                   <Icon name="file" /> Read the paper
-                </a>
-                <a className="btn btn-ghost" href={profile.cv} target="_blank" rel="noopener">
-                  <Icon name="download" /> CV
                 </a>
               </div>
             </Reveal>
-            <Reveal delay={360}>
+            <Reveal delay={340}>
               <div className="hero-social">
                 {socialLinks.map((s) => (
                   <a
@@ -76,47 +110,35 @@ export function Hero() {
             </Reveal>
           </div>
 
-          <Reveal delay={200} className="hero-visual">
-            <div className="photo-frame">
+          <Reveal delay={200} className="avatar-wrap">
+            <div className="avatar-glow" aria-hidden="true" />
+            <div className="orbit-dashes" aria-hidden="true" />
+            <div className="avatar-ring" aria-hidden="true" />
+            <div className="avatar">
               <img src={profile.photo} alt={`Portrait of ${profile.name}`} width={600} height={600} />
             </div>
-            <div className="terminal" aria-label="Current focus, written as a terminal session">
-              <div className="terminal-bar" aria-hidden="true">
-                <i />
-                <i />
-                <i />
-                <span>~/research</span>
-              </div>
-              <div className="terminal-body">
-                <div>
-                  <span className="p">$</span> <span className="c">whoami</span>
-                </div>
-                <div>ai_engineer · independent_researcher</div>
-                <div>
-                  <span className="p">$</span> <span className="c">cat focus.txt</span>
-                </div>
-                <div>
-                  agent security · <span className="w">prompt injection</span>
-                </div>
-                <div>honest evaluation of ML claims</div>
-                <div>
-                  <span className="p">$</span> <span className="cursor" aria-hidden="true" />
-                </div>
-              </div>
-            </div>
+            {heroBadges.map((b) => (
+              <span className="float-badge" key={b.label}>
+                <i>
+                  <Icon name={b.icon} />
+                </i>
+                {b.label}
+              </span>
+            ))}
           </Reveal>
         </div>
 
-        <Reveal delay={120}>
-          <dl className="stats-strip">
-            {heroStats.map((s) => (
-              <div className="stat" key={s.label}>
-                <dt className="stat-label">{s.label}</dt>
-                <dd className="stat-value">{s.value}</dd>
-              </div>
+        <Stats />
+
+        <div className="marquee" aria-label="Technologies I work with">
+          <div className="marquee-track">
+            {loop.map((t, i) => (
+              <span className="marquee-item" key={`${t}-${i}`} aria-hidden={i >= techMarquee.length}>
+                {t}
+              </span>
             ))}
-          </dl>
-        </Reveal>
+          </div>
+        </div>
       </div>
     </section>
   );

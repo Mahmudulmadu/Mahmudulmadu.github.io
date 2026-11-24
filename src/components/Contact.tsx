@@ -1,26 +1,46 @@
+import { useState } from 'react';
 import { profile } from '../data/profile';
+import { useScroll } from '../hooks';
 import { socialLinks } from './Hero';
 import { Icon } from './Icon';
 import { Reveal } from './Reveal';
 
 export function Contact() {
+  const [copied, setCopied] = useState(false);
+  const { far } = useScroll();
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(profile.email);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      window.location.href = `mailto:${profile.email}`;
+    }
+  };
+
   return (
     <section id="contact">
       <div className="container">
-        <Reveal className="card contact">
-          <div className="eyebrow" style={{ justifyContent: 'center' }}>
-            09 · Contact
+        <Reveal className="card gborder contact">
+          <div className="eyebrow">
+            <b>10</b> Contact
           </div>
-          <h2>Working on agent security, trustworthy ML or evaluation methodology?</h2>
+          <h2>
+            Let’s build something <span className="gradient-text">intelligent</span> together.
+          </h2>
           <p>
-            I would like to hear from professors and research groups in AI security, and from teams building agents that
-            need to hold up under attack.
+            Open to AI engineering roles, research collaborations and PhD opportunities. Whether it is agents, RAG, ML
+            research or AI security, I’d like to hear from you.
           </p>
           <div className="contact-actions">
-            <a className="btn btn-primary" href={`mailto:${profile.email}`}>
-              <Icon name="mail" /> {profile.email}
+            <a className="btn btn-grad" href={`mailto:${profile.email}`}>
+              <Icon name="mail" /> Email me
             </a>
-            <a className="btn" href={profile.cv} target="_blank" rel="noopener">
+            <button type="button" className="btn" onClick={copy} aria-live="polite">
+              <Icon name={copied ? 'check' : 'copy'} /> {copied ? 'Copied!' : profile.email}
+            </button>
+            <a className="btn btn-ghost" href={profile.cv} target="_blank" rel="noopener">
               <Icon name="download" /> Download CV
             </a>
           </div>
@@ -32,9 +52,6 @@ export function Contact() {
                   <Icon name={s.icon} /> {s.label}
                 </a>
               ))}
-            <a className="btn btn-sm btn-ghost" href={profile.links.codeforces} target="_blank" rel="noopener">
-              <Icon name="terminal" /> Codeforces
-            </a>
           </div>
         </Reveal>
       </div>
@@ -44,9 +61,19 @@ export function Contact() {
           <span>
             © {new Date().getFullYear()} {profile.name} · {profile.location}
           </span>
-          <span className="mono">Built with React + TypeScript</span>
+          <span className="mono">Designed & built with React + TypeScript</span>
         </div>
       </footer>
+
+      <button
+        type="button"
+        className={`to-top ${far ? 'is-shown' : ''}`}
+        aria-label="Back to top"
+        tabIndex={far ? 0 : -1}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <Icon name="arrowUp" />
+      </button>
     </section>
   );
 }

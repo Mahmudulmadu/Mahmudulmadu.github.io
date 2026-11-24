@@ -3,20 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Md. Mahmudul Hasan · AI Engineer & AI Security Researcher</title>
+    <title>Md. Mahmudul Hasan · AI Engineer & Researcher</title>
     <meta
       name="description"
-      content="Md. Mahmudul Hasan: AI Engineer building production multi-agent systems, independent researcher in AI agent security and honest ML evaluation."
+      content="Md. Mahmudul Hasan: AI Engineer building production multi-agent systems, RAG and fine-tuned models; independent researcher in ML evaluation, digital twins and AI security."
     />
     <meta name="author" content="Md. Mahmudul Hasan" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Md. Mahmudul Hasan · AI Engineer & AI Security Researcher" />
+    <meta property="og:title" content="Md. Mahmudul Hasan · AI Engineer & Researcher" />
     <meta
       property="og:description"
-      content="Building production multi-agent AI systems, and researching how they can be broken."
+      content="Building production multi-agent AI systems, RAG pipelines and fine-tuned models, and researching how ML claims and LLM agents fail."
     />
     <meta property="og:image" content="profile.jpg" />
-    <meta name="theme-color" content="#0a0d12" />
+    <meta name="theme-color" content="#05060d" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,7 +29,8 @@
       (function () {
         try {
           var t = localStorage.getItem('theme');
-          if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+          if (t !== 'light' && t !== 'dark') t = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', t);
         } catch (e) {}
       })();
     </script>
