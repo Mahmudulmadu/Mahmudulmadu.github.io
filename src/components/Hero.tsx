@@ -86,9 +86,6 @@ export function Hero({ theme }: { theme: Theme }) {
                 <a className="btn" href={profile.cv} target="_blank" rel="noopener">
                   <Icon name="download" /> Download CV
                 </a>
-                <a className="btn btn-ghost" href="#publication">
-                  <Icon name="file" /> Read the paper
-                </a>
               </div>
             </Reveal>
             <Reveal delay={340}>

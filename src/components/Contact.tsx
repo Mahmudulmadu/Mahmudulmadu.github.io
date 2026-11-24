@@ -24,7 +24,7 @@ export function Contact() {
       <div className="container">
         <Reveal className="card gborder contact">
           <div className="eyebrow">
-            <b>10</b> Contact
+            <b>08</b> Contact
           </div>
           <h2>
             Let’s build something <span className="gradient-text">intelligent</span> together.

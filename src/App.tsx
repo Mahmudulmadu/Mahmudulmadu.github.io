@@ -1,14 +1,11 @@
-import { About, Expertise } from './components/About';
+import { About, Skills } from './components/About';
 import { Contact } from './components/Contact';
 import { Experience } from './components/Experience';
 import { Hero } from './components/Hero';
 import { Nav } from './components/Nav';
 import { Projects } from './components/Projects';
-import { Publication } from './components/Publication';
+import { Achievements, Education } from './components/Recognition';
 import { Research } from './components/Research';
-import { Security } from './components/Security';
-import { Honors, Skills } from './components/Skills';
-import { Teaching } from './components/Teaching';
 import { useSpotlight, useTheme } from './hooks';
 
 export default function App() {
@@ -30,15 +27,12 @@ export default function App() {
       <main id="main">
         <Hero theme={theme} />
         <About />
-        <Expertise />
+        <Skills />
         <Experience />
         <Projects />
-        <Publication />
         <Research />
-        <Security />
-        <Teaching />
-        <Skills />
-        <Honors />
+        <Education />
+        <Achievements />
         <Contact />
       </main>
     </>

@@ -1,15 +1,11 @@
-import { useState, type CSSProperties } from 'react';
-import { profile, projects, type ProjectCategory } from '../data/profile';
+import type { CSSProperties } from 'react';
+import { profile, projects } from '../data/profile';
 import { Icon } from './Icon';
 import { Reveal, SectionHead } from './Reveal';
 
-type Filter = 'All' | ProjectCategory;
-const filters: Filter[] = ['All', 'AI / ML', 'Research', 'Full-stack'];
-
 export function Projects() {
-  const [filter, setFilter] = useState<Filter>('All');
-  const shown = projects.filter((p) => filter === 'All' || p.category === filter);
-  const count = (f: Filter) => (f === 'All' ? projects.length : projects.filter((p) => p.category === f).length);
+  const featured = projects.filter((p) => p.featured);
+  const others = projects.filter((p) => !p.featured);
 
   return (
     <section className="section" id="projects">
@@ -19,26 +15,18 @@ export function Projects() {
           label="Projects"
           title={
             <>
-              Things I’ve <span className="gradient-text">built and shipped</span>.
+              Selected <span className="gradient-text">projects</span>.
             </>
           }
-          lede="Personal and open-source work, from fine-tuned models to clean APIs. Production systems at Ainvio are private, so they are described under Experience."
+          lede="Personal and open-source work. Production systems at Ainvio are private, so they are described under Experience."
         />
 
-        <div className="filter-row" role="group" aria-label="Filter projects">
-          {filters.map((f) => (
-            <button key={f} type="button" className="filter" aria-pressed={filter === f} onClick={() => setFilter(f)}>
-              {f} <span className="count">{count(f)}</span>
-            </button>
-          ))}
-        </div>
-
         <div className="project-grid">
-          {shown.map((p, i) => (
+          {featured.map((p, i) => (
             <Reveal
               as="article"
-              key={`${filter}-${p.name}`}
-              delay={(i % 3) * 70}
+              key={p.name}
+              delay={i * 80}
               className="card spot lift project"
               style={{ '--h': p.hue } as CSSProperties}
             >
@@ -47,7 +35,7 @@ export function Projects() {
                   <span className="cover-cat">
                     {p.category} · {p.year}
                   </span>
-                  {p.featured && <span className="badge badge-grad">Featured</span>}
+                  <span className="badge badge-grad">Featured</span>
                 </div>
                 <span className="cover-tagline">{p.tagline}</span>
                 <Icon name={p.icon} className="cover-icon" strokeWidth={1.2} />
@@ -69,21 +57,56 @@ export function Projects() {
                     </span>
                   ))}
                 </div>
-                {(p.repo || p.demo) && (
-                  <div className="project-links">
-                    {p.repo && (
-                      <a href={p.repo} target="_blank" rel="noopener" aria-label={`${p.name} source code on GitHub`}>
-                        <Icon name="github" /> Code
-                      </a>
-                    )}
-                    {p.demo && (
-                      <a href={p.demo} target="_blank" rel="noopener" aria-label={`${p.name} ${p.demoLabel ?? 'demo'}`}>
-                        <Icon name="play" /> {p.demoLabel ?? 'Demo'}
-                      </a>
-                    )}
-                  </div>
-                )}
+                <div className="project-links">
+                  {p.repo && (
+                    <a href={p.repo} target="_blank" rel="noopener" aria-label={`${p.name} source code on GitHub`}>
+                      <Icon name="github" /> Code
+                    </a>
+                  )}
+                  {p.demo && (
+                    <a href={p.demo} target="_blank" rel="noopener" aria-label={`${p.name} ${p.demoLabel ?? 'demo'}`}>
+                      <Icon name="play" /> {p.demoLabel ?? 'Demo'}
+                    </a>
+                  )}
+                </div>
               </div>
+            </Reveal>
+          ))}
+        </div>
+
+        <h3 className="more-title">More projects</h3>
+        <div className="mini-grid">
+          {others.map((p, i) => (
+            <Reveal
+              as="article"
+              key={p.name}
+              delay={(i % 4) * 60}
+              className="card spot lift mini"
+              style={{ '--h': p.hue } as CSSProperties}
+            >
+              <div className="mini-top">
+                <span className="mini-icon">
+                  <Icon name={p.icon} />
+                </span>
+                <div className="mini-links">
+                  {p.demo && (
+                    <a href={p.demo} target="_blank" rel="noopener" aria-label={`${p.name} ${p.demoLabel ?? 'demo'}`} title={p.demoLabel ?? 'Demo'}>
+                      <Icon name="play" />
+                    </a>
+                  )}
+                  {p.repo && (
+                    <a href={p.repo} target="_blank" rel="noopener" aria-label={`${p.name} source code on GitHub`} title="Code on GitHub">
+                      <Icon name="github" />
+                    </a>
+                  )}
+                </div>
+              </div>
+              <span className="mini-cat">
+                {p.category} · {p.year}
+              </span>
+              <h4>{p.name}</h4>
+              <p>{p.description}</p>
+              <div className="mini-tech">{p.tech.join(' · ')}</div>
             </Reveal>
           ))}
         </div>

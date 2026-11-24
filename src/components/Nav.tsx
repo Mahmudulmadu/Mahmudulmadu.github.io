@@ -5,22 +5,20 @@ import { Icon } from './Icon';
 
 export const navItems = [
   { id: 'about', label: 'About' },
-  { id: 'expertise', label: 'Expertise' },
+  { id: 'skills', label: 'Skills' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
-  { id: 'publication', label: 'Research' },
-  { id: 'security', label: 'AI Security' },
-  { id: 'teaching', label: 'Teaching' },
-  { id: 'skills', label: 'Skills' },
+  { id: 'research', label: 'Research' },
+  { id: 'education', label: 'Education' },
+  { id: 'achievements', label: 'Achievements' },
 ];
 
-const ids = [...navItems.map((n) => n.id), 'research', 'honors', 'contact'];
+const ids = [...navItems.map((n) => n.id), 'contact'];
 
 export function Nav({ theme, onToggleTheme }: { theme: Theme; onToggleTheme: () => void }) {
   const [open, setOpen] = useState(false);
   const { progress, past } = useScroll();
-  let active = useActiveSection(ids);
-  if (active === 'research') active = 'publication';
+  const active = useActiveSection(ids);
 
   useEffect(() => {
     if (!open) return;

@@ -1,91 +1,55 @@
 import type { CSSProperties } from 'react';
-import { education, expertise, interests, paper, profile } from '../data/profile';
+import { about, concepts, profile, skillGroups } from '../data/profile';
 import { Icon } from './Icon';
 import { Reveal, SectionHead } from './Reveal';
 
 export function About() {
-  const uits = education[0];
   return (
     <section className="section" id="about">
       <div className="container">
         <SectionHead
           index="01"
-          label="About me"
+          label="About"
           title={
             <>
-              Engineer by trade, <span className="gradient-text">researcher by habit.</span>
+              Engineer by trade, <span className="gradient-text">researcher by habit</span>.
             </>
           }
         />
-        <div className="bento">
-          <Reveal className="card gborder spot b-summary">
-            <div className="b-label">
-              <Icon name="sparkles" /> Professional summary
+        <div className="about-grid">
+          <Reveal className="about-text">
+            {about.paragraphs.map((p) => (
+              <p key={p.slice(0, 24)}>{p}</p>
+            ))}
+            <div className="about-interests">
+              <span className="subhead">Interests</span>
+              <div className="chip-list">
+                {about.interests.map((i) => (
+                  <span className="chip chip-accent" key={i}>
+                    {i}
+                  </span>
+                ))}
+              </div>
             </div>
-            <h3>
-              I turn LLMs into <span className="gradient-text">reliable products</span>.
-            </h3>
-            <p>{profile.summary}</p>
-            <div className="chip-list">
-              {['Agentic AI', 'RAG', 'Fine-tuning', 'NLP-to-SQL', 'Azure', 'AWS', '.NET', 'React'].map((t) => (
-                <span className="chip" key={t}>
-                  {t}
-                </span>
+          </Reveal>
+
+          <Reveal className="card gborder facts" delay={100}>
+            <ul>
+              {about.facts.map((f) => (
+                <li key={f.label}>
+                  <span className="fact-icon">
+                    <Icon name={f.icon} />
+                  </span>
+                  <span>
+                    <span className="fact-label">{f.label}</span>
+                    <span className="fact-value">{f.value}</span>
+                  </span>
+                </li>
               ))}
-            </div>
-          </Reveal>
-
-          <Reveal className="card spot b-now" delay={80}>
-            <div className="b-label">
-              <Icon name="briefcase" /> Currently
-            </div>
-            <div className="b-big">
-              <span className="pulse" aria-hidden="true" />
-              AI Engineer
-            </div>
-            <p className="b-sub">Ainvio Pte Ltd · Singapore (hybrid) · since Dec 2025</p>
-          </Reveal>
-
-          <Reveal className="card spot b-place" delay={140}>
-            <div className="b-label">
-              <Icon name="mapPin" /> Based in
-            </div>
-            <div className="b-big">{profile.location}</div>
-            <p className="b-sub">{profile.languages.join(' · ')}</p>
-          </Reveal>
-
-          <Reveal className="card spot b-research" delay={60}>
-            <div className="b-label">
-              <Icon name="flask" /> Research
-            </div>
-            <div className="b-big">First-author arXiv preprint</div>
-            <p className="b-sub">
-              {paper.status}. Plus ongoing digital-twin and RAG-LLM research. <a className="link-arrow" href="#publication">Read more <Icon name="arrowUpRight" /></a>
-            </p>
-          </Reveal>
-
-          <Reveal className="card spot b-interests" delay={120}>
-            <div className="b-label">
-              <Icon name="target" /> Interests
-            </div>
-            <div className="interest-row">
-              {interests.map((i) => (
-                <span className="interest-chip" key={i.label}>
-                  {i.label}
-                  {i.note && <small>{i.note}</small>}
-                </span>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal className="card spot b-edu" delay={180}>
-            <div className="b-label">
-              <Icon name="graduation" /> Education
-            </div>
-            <div className="b-big">{uits.degree}</div>
-            <p className="b-sub">
-              UITS, {uits.period} · <strong style={{ color: 'var(--text)' }}>{uits.grade}</strong>
-            </p>
+            </ul>
+            <a className="btn btn-grad facts-cta" href={profile.cv} target="_blank" rel="noopener">
+              <Icon name="download" /> Download CV
+            </a>
           </Reveal>
         </div>
       </div>
@@ -93,44 +57,57 @@ export function About() {
   );
 }
 
-export function Expertise() {
+export function Skills() {
   return (
-    <section className="section" id="expertise">
+    <section className="section" id="skills">
       <div className="container">
         <SectionHead
           index="02"
-          label="What I do"
+          label="Skills"
           title={
             <>
-              Across the <span className="gradient-text">whole AI stack</span>.
+              What I <span className="gradient-text">work with</span>.
             </>
           }
-          lede="From agents and retrieval to model training, research, security and the full-stack systems they run in."
         />
-        <div className="expertise">
-          {expertise.map((x, i) => (
+        <div className="skill-grid">
+          {skillGroups.map((g, i) => (
             <Reveal
-              key={x.title}
+              key={g.title}
               as="article"
-              delay={(i % 3) * 80}
-              className="card spot lift xp-card"
-              style={{ '--h': x.hue } as CSSProperties}
+              delay={(i % 3) * 70}
+              className="card spot lift skill-card"
+              style={{ '--h': g.hue } as CSSProperties}
             >
-              <span className="xp-icon">
-                <Icon name={x.icon} />
-              </span>
-              <h3>{x.title}</h3>
-              <p>{x.text}</p>
+              <div className="skill-head">
+                <span className="xp-icon">
+                  <Icon name={g.icon} />
+                </span>
+                <div>
+                  <h3>{g.title}</h3>
+                  <p>{g.text}</p>
+                </div>
+              </div>
               <div className="chip-list">
-                {x.tags.map((t) => (
-                  <span className="chip" key={t}>
-                    {t}
+                {g.items.map((s) => (
+                  <span className="chip" key={s}>
+                    {s}
                   </span>
                 ))}
               </div>
             </Reveal>
           ))}
         </div>
+        <Reveal className="concepts">
+          <span className="subhead">Foundations</span>
+          <div className="chip-list">
+            {concepts.map((c) => (
+              <span className="chip" key={c}>
+                {c}
+              </span>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
